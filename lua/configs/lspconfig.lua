@@ -2,6 +2,7 @@ local configs = require "nvchad.configs.lspconfig"
 
 local on_attach_redefeined = function(client, bufnr)
     configs.on_attach(client, bufnr)
+    vim.lsp.inlay_hint.enable(true)
     require("mappings").init_lsp_mappings(bufnr)
 end
 
@@ -12,7 +13,9 @@ local servers = {
         on_init = configs.on_init,
         capabilities = configs.capabilities,
         on_attach = on_attach_redefeined,
+        -- do_not_setup = {},
     },
+    gopls = {},
     bashls = {},
     lua_ls = {
         on_init = function(client)
