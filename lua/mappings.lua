@@ -59,7 +59,7 @@ M.telescope_mappings = function()
     scope("<leader>wgc", ":Telescope git_commits<CR>", "git commit by telescope")
     scope("<leader>wgb", ":Telescope git_commits<CR>", "git branches by telescope")
     scope("<leader>wd", ":Telescope diagnostics<CR>", "show diagnostics for current workspace")
-    scope("<leader>ws", ":Telescope lsp_workspace_symbols", "Show all symbols for current workspace")
+    scope("<leader>ws", ":Telescope lsp_workspace_symbols<CR>", "Show all symbols for current workspace")
 
     unmap("n", "<leader>gt") -- nvchad's version of <leader>fgs
     unmap("n", "<leader>cm") -- nvchad's version of <leader>fgc
