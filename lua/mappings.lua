@@ -39,22 +39,28 @@ end
 -- oh my telescope
 M.telescope_mappings = function()
     local scope = function(key, cmd, doc)
-        map("n", key, cmd, { desc = doc })
+        map({ "n", "v" }, key, cmd, { desc = doc })
     end
 
     scope("<leader>fF", ":Telescope<CR>", "Telescope menu")
     scope("<leader>fk", ":Telescope keymaps<CR>", "telescope Show vim's mapped keys")
+    scope("<leader>fpp", ":Telescope project<CR>", "Telescop project extensin")
+
+    scope("<leader>ff", ":Telescope find_files<CR>", "find files")
     scope("<leader>fw", ":Telescope live_grep<CR>", "telescope live grep")
     scope("<leader>fb", ":Telescope buffers<CR>", "telescope find buffers")
+    scope("<leader>fo", ":Telescope oldfiles<CR>", "telescope list previously opened files")
     scope("<leader>fh", ":Telescope help_tags<CR>", "telescope help page")
     scope("<leader>fma", ":Telescope marks<CR>", "telescope find marks")
     scope("<leader>fo", ":Telescope oldfiles<CR>", "telescope find oldfiles")
     scope("<leader>fz", ":Telescope current_buffer_fuzzy_find<CR>", "telescope find in current buffer")
     scope("<leader>fts", ":Telescope terms<CR>", "telescope pick hidden term")
-    scope("<leader>fgs", ":Telescope git_status<CR>", "git status by telescope")
-    scope("<leader>fgc", ":Telescope git_commits<CR>", "git commit by telescope")
-    scope("<leader>fgb", ":Telescope git_commits<CR>", "git branches by telescope")
-    scope("<leader>fpp", ":Telescope project<CR>", "Telescop project extensin")
+    scope("<leader>wgs", ":Telescope git_status<CR>", "git status by telescope")
+    scope("<leader>wgc", ":Telescope git_commits<CR>", "git commit by telescope")
+    scope("<leader>wgb", ":Telescope git_commits<CR>", "git branches by telescope")
+    scope("<leader>wd", ":Telescope diagnostics<CR>", "show diagnostics for current workspace")
+    scope("<leader>ws", ":Telescope lsp_workspace_symbols", "Show all symbols for current workspace")
+
     unmap("n", "<leader>gt") -- nvchad's version of <leader>fgs
     unmap("n", "<leader>cm") -- nvchad's version of <leader>fgc
     unmap("n", "<leader>ma") -- nvchad's version of <leader>fma
@@ -93,16 +99,15 @@ M.init_lsp_mappings = function(bufnr)
     map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
     map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
     map("n", "gi", vim.lsp.buf.implementation, opts "Go to implementation")
-    map("n", "<leader>sh", vim.lsp.buf.signature_help, opts "Show signature help")
-    map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
-    map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
     map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
+    map("n", "gr", vim.lsp.buf.references, opts "Show references")
+    map("n", "<leader>sh", vim.lsp.buf.signature_help, opts "Show signature help")
+    map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts "Code action")
     map("n", "<leader>ra", require "nvchad.lsp.renamer", opts "NvRenamer")
     map("n", "<leader>K", vim.lsp.buf.hover, opts "Hover")
 
-    map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts "Code action")
-    map("n", "gr", vim.lsp.buf.references, opts "Show references")
-
+    map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
+    map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
     map("n", "<leader>wl", function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, opts "List workspace folders")
