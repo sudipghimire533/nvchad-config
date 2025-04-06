@@ -3,6 +3,7 @@ require "nvchad.mappings"
 local M = {}
 
 local map = vim.keymap.set
+local unmap = vim.keymap.del
 
 -- default mappings for everything
 M.default_mappings = function()
@@ -13,6 +14,51 @@ M.default_mappings = function()
         vim.fn.jobstart("diodon", { detach = false })
         vim.cmd "stopinsert"
     end, { desc = "Launch diodon" })
+end
+
+-- let's use some mouse
+M.mouse_mappings = function() end
+
+-- move that thing
+M.navigation_mappings = function()
+    local buf = require "nvchad.tabufline"
+    local nav_with = function(key, cmd, doc)
+        map("n", key, cmd, { desc = doc })
+    end
+
+    nav_with("<C-Tab>", ":tabnext<cr>", "goto next tabpage")
+    nav_with("<C-S-Tab>", ":tabprevious<cr>", "goto next tabpage")
+    nav_with("<Tab>", buf.next, "buffer goto next")
+    nav_with("<S-Tab>", buf.prev, "buffer goto previous")
+    unmap("n", "<C-h>")
+    unmap("n", "<C-j>")
+    unmap("n", "<C-k>")
+    unmap("n", "<C-l>")
+end
+
+-- oh my telescope
+M.telescope_mappings = function()
+    local scope = function(key, cmd, doc)
+        map("n", key, cmd, { desc = doc })
+    end
+
+    scope("<leader>fF", ":Telescope<CR>", "Telescope menu")
+    scope("<leader>fk", ":Telescope keymaps<CR>", "telescope Show vim's mapped keys")
+    scope("<leader>fw", ":Telescope live_grep<CR>", "telescope live grep")
+    scope("<leader>fb", ":Telescope buffers<CR>", "telescope find buffers")
+    scope("<leader>fh", ":Telescope help_tags<CR>", "telescope help page")
+    scope("<leader>fma", ":Telescope marks<CR>", "telescope find marks")
+    scope("<leader>fo", ":Telescope oldfiles<CR>", "telescope find oldfiles")
+    scope("<leader>fz", ":Telescope current_buffer_fuzzy_find<CR>", "telescope find in current buffer")
+    scope("<leader>fts", ":Telescope terms<CR>", "telescope pick hidden term")
+    scope("<leader>fgs", ":Telescope git_status<CR>", "git status by telescope")
+    scope("<leader>fgc", ":Telescope git_commits<CR>", "git commit by telescope")
+    scope("<leader>fgb", ":Telescope git_commits<CR>", "git branches by telescope")
+    scope("<leader>fpp", ":Telescope project<CR>", "Telescop project extensin")
+    unmap("n", "<leader>gt") -- nvchad's version of <leader>fgs
+    unmap("n", "<leader>cm") -- nvchad's version of <leader>fgc
+    unmap("n", "<leader>ma") -- nvchad's version of <leader>fma
+    unmap("n", "<leader>pt") -- nvchad's version of <leader>fts
 end
 
 -- terminal inside neovim
@@ -77,6 +123,13 @@ M.overrides_for_rustacean = function(bufnr)
     end
 
     map("n", "<leader>K", vim.cmd.RustLsp { "hover", "actions" }, opts "Hover")
+end
+
+M.apply_all = function()
+    M.default_mappings()
+    M.navigation_mappings()
+    M.telescope_mappings()
+    M.terminal_mappings()
 end
 
 return M
