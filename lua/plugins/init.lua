@@ -1,4 +1,4 @@
-
+local lspconfig = require "configs.lspconfig"
 
 return {
     {
@@ -10,7 +10,7 @@ return {
     {
         "neovim/nvim-lspconfig",
         config = function()
-            require "configs.lspconfig"
+            return lspconfig
         end,
     },
 
@@ -35,7 +35,7 @@ return {
     -- rust
     {
         "mrcjkb/rustaceanvim",
-        version = "^5",
+        version = "^6",
         lazy = false, -- This plugin is already lazy
     },
 

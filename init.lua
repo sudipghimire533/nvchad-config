@@ -33,5 +33,7 @@ require "options"
 require "nvchad.autocmds"
 
 vim.schedule(function()
-    require("mappings").default_mappings()
+    local mappings = require "mappings"
+    mappings.default_mappings()
+    mappings.terminal_mappings()
 end)

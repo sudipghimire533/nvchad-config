@@ -1,22 +1,34 @@
 local configs = require "nvchad.configs.lspconfig"
+local mappings = require "mappings"
+local lspconfig = require "lspconfig"
+
+local L = {}
 
 local on_attach_redefeined = function(client, bufnr)
     configs.on_attach(client, bufnr)
     vim.lsp.inlay_hint.enable(true)
-    require("mappings").init_lsp_mappings(bufnr)
+    mappings.init_lsp_mappings(bufnr)
 end
 
-local servers = {
+L.servers = {
     html = {},
     awk_ls = {},
+    gopls = {},
+    ts_ls = {},
+    bashls = {},
+
+    -- rust
     rust_analyzer = {
         on_init = configs.on_init,
         capabilities = configs.capabilities,
-        on_attach = on_attach_redefeined,
-        -- do_not_setup = {},
+        on_attach = function(client, bufnr)
+            on_attach_redefeined(client, bufnr)
+            mappings.overrides_for_rustacean(bufnr)
+        end,
+        do_not_setup = {},
     },
-    gopls = {},
-    bashls = {},
+
+    -- lua
     lua_ls = {
         on_init = function(client)
             configs.on_init(client)
@@ -49,7 +61,7 @@ local servers = {
     },
 }
 
-for name, opts in pairs(servers) do
+for name, opts in pairs(L.servers) do
     if not opts.on_init then
         opts.on_init = configs.on_init
     end
@@ -60,15 +72,15 @@ for name, opts in pairs(servers) do
         opts.on_attach = on_attach_redefeined
     end
     if not opts.do_not_setup then
-        require("lspconfig")[name].setup(opts)
+        lspconfig[name].setup(opts)
     end
 end
 
--- rust specific config for rustaceanvim
--- provides non-standard lsp features
-local rustaceanvim = require "rustaceanvim"
-rustaceanvim.configs = {
-    server = servers.rust_analyzer,
+L.rustacean = {
+    server = L.servers.rust_analyzer,
     tools = {},
     dap = {},
 }
+vim.g.rustaceanvim = L.rustacean
+
+return L
