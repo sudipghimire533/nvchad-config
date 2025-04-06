@@ -46,4 +46,28 @@ return {
             require "configs.dap-config"
         end,
     },
+
+    -- more telescope stuff
+    {
+        "nvim-telescope/telescope-project.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim" },
+    },
+
+    {
+        "nvim-telescope/telescope-file-browser.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+    },
+
+    -- dashboard
+    {
+        "goolord/alpha-nvim",
+        priority = 2000,
+        lazy = false,
+        config = require "configs.dashboard",
+    },
+
+    -- for typescript
+    {
+        "typescript-language-server/typescript-language-server",
+    },
 }

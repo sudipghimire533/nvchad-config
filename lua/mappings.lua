@@ -7,6 +7,12 @@ local map = vim.keymap.set
 -- default mappings for everything
 M.default_mappings = function()
     map("n", ";", ":", { desc = "CMD enter command mode" })
+
+    -- bring clipboard history. I use diodon and xclip. Will bring popup at mouse pointer location
+    map({ "n", "i", "v", "c", "t" }, "<C-v>", function()
+        vim.fn.jobstart("diodon", { detach = false })
+        vim.cmd "stopinsert"
+    end, { desc = "Launch diodon" })
 end
 
 -- terminal inside neovim
@@ -23,11 +29,13 @@ M.terminal_mappings = function()
         end, { desc = desc })
     end
 
-    toggle_terminal({ "n", "t" }, "<leader>v", "vsp", "terminal toggleable vertical term")
-    toggle_terminal({ "n", "t" }, "<leader>h", "sp", "terminal toggleable horizontal term")
-    toggle_terminal({ "n", "t" }, "<A-i>", "float", "terminal toggle floating term")
+    toggle_terminal("n", "<leader>v", "vsp", "terminal toggleable vertical term")
+    toggle_terminal("n", "<leader>h", "sp", "terminal toggleable horizontal term")
+    toggle_terminal("n", "<A-i>", "float", "terminal toggle floating term")
     new_terminal("n", "<A-v>", "vsp", "terminal new vertical term")
     new_terminal("n", "<A-h>", "sp", "terminal new horizontal term")
+    -- escape terminal
+    map("t", "<Esc>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 end
 
 -- mappings enabled if some lsp server is attached
